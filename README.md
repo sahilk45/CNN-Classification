@@ -1,30 +1,23 @@
-# 🐱🐶 Image Classification using CNN (TensorFlow & Keras)
+# 🐱🐶 Image Classification (CNN & Transfer Learning)
 
-This project implements a **Convolutional Neural Network (CNN)** to classify images of **cats and dogs** using **TensorFlow and Keras**.  
-The model is trained on a large image dataset and evaluated on unseen test images.
+This project demonstrates **binary image classification (Cat vs Dog)** using **three different deep learning approaches** in **TensorFlow & Keras**, progressing from a **custom CNN** to **Transfer Learning with VGG16**.
 
 ---
 
-## 📌 Project Overview
+## 📌 Project Summary
 
 - **Task**: Binary Image Classification (Cat vs Dog)
 - **Framework**: TensorFlow & Keras
-- **Model Type**: Convolutional Neural Network (CNN)
-- **Input Image Size**: `256 × 256 × 3`
-- **Output**: Probability score using **Sigmoid activation**
+- **Input Sizes**:
+  - Custom CNN: `256 × 256 × 3`
+  - VGG16 Models: `150 × 150 × 3`
+- **Output**: Sigmoid probability  
+  (`0 → Cat`, `1 → Dog`)
 - **Loss Function**: Binary Crossentropy
-- **Optimizer**: Adam
 
 ---
 
 ## 📂 Dataset
-
-The dataset contains images divided into two classes:
-
-- `Cat`
-- `Dog`
-
-Directory structure:
 
 dataset/
 
@@ -33,6 +26,7 @@ dataset/
 │ ├── cats/
 
 │ └── dogs/
+
 │
 │── test/
 
@@ -41,22 +35,77 @@ dataset/
 │ └── dogs/
 
 
-
 - **Training Images**: 20,000  
 - **Validation Images**: 5,000  
 
 📎 **Dataset Link**:  
-👉 [https://your-dataset-link-here](https://www.kaggle.com/datasets/princelv84/dogsvscats)
+👉 [https://www.kaggle.com/datasets/princelv84/dogsvscats](https://www.kaggle.com/datasets/princelv84/dogsvscats)
 
 ---
 
-## 🚀 How to Run the Project (Google Colab)
+## 🧠 Models Implemented
 
-1. Open the notebook in **Google Colab**
-2. Upload the dataset zip file
-3. Unzip the dataset:
+### 🔹 1. Custom CNN (From Scratch)
+- Built using Conv2D, BatchNormalization, MaxPooling & Dense layers
+- Trained directly on raw images
+- **Validation Accuracy**: ~78–80%
+- Shows limitations of training deep CNNs from scratch on large images
 
-```bash
+---
+
+### 🔹 2. VGG16 – Feature Extraction
+- Pretrained **VGG16 (ImageNet)** used as a frozen feature extractor
+- Custom classifier added on top
+- **Validation Accuracy**: ~91–92%
+- Faster convergence and better performance than custom CNN
+
+---
+
+### 🔹 3. VGG16 – Fine Tuning
+- Upper layers of VGG16 unfrozen (`block5` onwards)
+- Lower learning rate + Dropout
+- **Validation Accuracy**: ~95%
+- Best generalization on unseen images
+
+---
+
+## ⚙️ Training Pipeline
+
+- Dataset loaded using `image_dataset_from_directory`
+- Batch size: `32`
+- Images normalized to `[0,1]`
+- Optimizers used:
+  - Adam (Custom CNN & Feature Extraction)
+  - RMSprop (Fine-Tuning, low LR)
+
+---
+
+## 🧪 Testing on Unseen Images
+
+- Tested on real-world images using OpenCV
+- Model successfully predicts unseen cat/dog images
+
+```python
+model.predict(image)
+# 0 → Cat | 1 → Dog
+```
+---
+
+## 📌 Key Takeaways
+
+- Transfer Learning significantly outperforms training from scratch
+- Freezing pretrained layers prevents overfitting
+- Fine-tuning improves validation accuracy
+- Lower learning rates are crucial during fine-tuning
+
+---
+
+## 🚀 How to Run (Google Colab)
+
+- Open notebook in Colab
+- Upload dataset ZIP
+- Unzip dataset:
+```python
 !unzip archive.zip
 ```
-4.Run all cells sequentially
+- Run all cells sequentially
